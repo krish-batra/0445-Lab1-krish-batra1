@@ -110,7 +110,9 @@ public class Rational{
     public Rational subtract(Rational other)
     {               
         // CHANGE THE RETURN TO SOMETHING APPROPRIATE
-        return this.add(other.negate());
+        int newNumerator = (this.numerator * other.denominator) - (other.numerator * this.denominator);
+        int newDenominator = this.denominator * other.denominator;
+        return new Rational(newNumerator, newDenominator);
     }
 
     /**
@@ -151,12 +153,17 @@ public class Rational{
     private void normalize()
     {
         // ADD CODE TO NORMALIZE THE RATIONAL NUMBER
-        if (denominator < 0){
+        if (numerator == 0) {
+            denominator = 1;
+            return;
+        }
+        if (denominator < 0) {
             numerator = -numerator;
             denominator = -denominator;
         }
-        int devisor = gcd(Math.abs(numerator),Math.abs(denominator));
-        numerator = numerator / devisor;
+        int divisor = gcd(Math.abs(numerator), Math.abs(denominator));
+        numerator = numerator / divisor;
+        denominator = denominator / divisor;
     }
     
     /**
@@ -166,19 +173,13 @@ public class Rational{
      * @param b the second argument of gcd
      * @return the gcd of the two arguments
      */
-    private int gcd(int a, int b)
-    {
-        int result = 0;
-        if(a<b)
-            result = gcd(b,a);
-        else if(b==0)
-            result = a;
-        else
-        {
-            int remainder = a % b;
-            result = gcd(b, remainder);
+    private int gcd(int a, int b){
+        while (b!=0){
+            int temp = b;
+            b = a % b;
+            a = temp;
         }
-        return result;
+        return a;
     }
    
     
